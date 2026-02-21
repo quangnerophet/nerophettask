@@ -66,13 +66,13 @@ const Dashboard = ({ tasks, user, onUpdateTask }) => {
         });
     };
 
-    // Deadline categories logic
-    const today = '2026-02-21';
+    // Deadline categories logic — exclude completed tasks
+    const today = new Date().toISOString().split('T')[0];
 
     const categories = {
         'Quá hạn': filteredTasks.filter(t => t.deadline < today && t.status !== 'Hoàn thành'),
-        'Hôm nay': filteredTasks.filter(t => t.deadline === today),
-        'Sắp đến hạn': filteredTasks.filter(t => t.deadline > today)
+        'Hôm nay': filteredTasks.filter(t => t.deadline === today && t.status !== 'Hoàn thành'),
+        'Sắp đến hạn': filteredTasks.filter(t => t.deadline > today && t.status !== 'Hoàn thành')
     };
 
     const deadlineStats = [
