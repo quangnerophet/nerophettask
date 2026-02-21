@@ -1,11 +1,11 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { LayoutDashboard, ListTodo, PlusCircle, LogOut, Users } from 'lucide-react';
+import { LayoutDashboard, ListTodo, PlusCircle, LogOut, Users, X } from 'lucide-react';
 import './Sidebar.css';
 
-const Sidebar = ({ user, onLogout }) => {
+const Sidebar = ({ user, onLogout, isOpen, onClose }) => {
   return (
-    <aside className="sidebar">
+    <aside className={`sidebar ${isOpen ? 'sidebar--open' : ''}`}>
       <div className="sidebar-header">
         <div className="logo-container">
           <div className="logo-icon">
@@ -19,10 +19,14 @@ const Sidebar = ({ user, onLogout }) => {
             <span>Quản lý Tasks</span>
           </div>
         </div>
+        {/* Close button on mobile */}
+        <button className="sidebar-close-btn" onClick={onClose} aria-label="Đóng menu">
+          <X size={20} />
+        </button>
       </div>
 
-      <nav className="sidebar-nav">
-        <NavLink to="/" className={({ isActive }) => isActive ? 'nav-item active' : 'nav-item'}>
+      <nav className="sidebar-nav" onClick={onClose}>
+        <NavLink to="/" end className={({ isActive }) => isActive ? 'nav-item active' : 'nav-item'}>
           <LayoutDashboard size={20} />
           <span>Tổng quan</span>
         </NavLink>
@@ -49,7 +53,6 @@ const Sidebar = ({ user, onLogout }) => {
           <div className="user-avatar">{user?.name?.charAt(0) || 'U'}</div>
           <div className="user-info">
             <span className="user-name">{user?.name}</span>
-            <span className="user-email">{user?.email}</span>
             <span className="user-role-badge">{user?.role}</span>
           </div>
         </div>

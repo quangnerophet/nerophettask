@@ -303,3 +303,42 @@
         transform: translateY(0);
     }
 }
+
+/* ========================
+   MOBILE RESPONSIVE
+   ======================== */
+@media (max-width: 768px) {
+    .stats-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .stat-card {
+        padding: 20px;
+    }
+
+    .deadline-stats-row {
+        flex-direction: column;
+    }
+
+    .deadline-stat-pill {
+        min-width: 0;
+    }
+
+    .task-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+    }
+
+    .task-badges {
+        width: 100%;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+    }
+
+    .task-main-info .task-meta {
+        flex-direction: column;
+        gap: 8px;
+    }
+}

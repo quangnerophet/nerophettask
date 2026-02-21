@@ -3,11 +3,85 @@
     min-height: 100vh;
 }
 
+.main-wrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    margin-left: var(--sidebar-width);
+    min-width: 0;
+}
+
 .main-content {
     flex: 1;
-    margin-left: var(--sidebar-width);
     padding: 40px;
     background: var(--bg-main);
+}
+
+/* Mobile top bar - hidden by default on desktop */
+.mobile-topbar {
+    display: none;
+    align-items: center;
+    gap: 16px;
+    padding: 12px 20px;
+    background: var(--bg-card);
+    border-bottom: 1px solid var(--border-color);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+}
+
+.mobile-logo {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+/* Hamburger button */
+.hamburger-btn {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 36px;
+    height: 36px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 8px;
+}
+
+.hamburger-btn span {
+    display: block;
+    width: 22px;
+    height: 2px;
+    background: var(--text-primary);
+    border-radius: 2px;
+    transition: all 0.2s ease;
+}
+
+.hamburger-btn:hover {
+    background: #F1F5F9;
+}
+
+/* Overlay backdrop */
+.sidebar-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 150;
+    animation: fadeInOverlay 0.2s ease;
+}
+
+@keyframes fadeInOverlay {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
 }
 
 .help-button {
@@ -29,4 +103,32 @@
 
 .help-button:hover {
     transform: scale(1.1);
+}
+
+/* ========================
+   MOBILE RESPONSIVE
+   ======================== */
+@media (max-width: 768px) {
+    .main-wrapper {
+        margin-left: 0;
+    }
+
+    .mobile-topbar {
+        display: flex;
+    }
+
+    .sidebar-overlay {
+        display: block;
+    }
+
+    .main-content {
+        padding: 20px 16px;
+    }
+
+    .help-button {
+        bottom: 16px;
+        right: 16px;
+        width: 36px;
+        height: 36px;
+    }
 }

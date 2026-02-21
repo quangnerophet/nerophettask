@@ -211,3 +211,37 @@
     text-transform: uppercase;
     letter-spacing: 0.025em;
 }
+
+/* ========================
+   MOBILE RESPONSIVE
+   ======================== */
+@media (max-width: 768px) {
+    .form-row {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+
+    .form-actions {
+        flex-direction: column;
+    }
+
+    .submit-btn,
+    .cancel-btn {
+        width: 100%;
+        padding: 12px;
+    }
+
+    .image-upload-box {
+        flex-direction: column;
+    }
+
+    .upload-btn {
+        width: 100%;
+        padding: 12px;
+        justify-content: center;
+    }
+
+    .assignee-selector-grid {
+        grid-template-columns: 1fr;
+    }
+}
