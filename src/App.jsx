@@ -1,5 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { collection, onSnapshot, addDoc, updateDoc, doc, setDoc, deleteDoc } from 'firebase/firestore';
+import { db } from './firebase';
+import { seedInitialData } from './utils/seedFirestore';
+import { getStatusClass, getPriorityClass } from './utils/helpers';
 import Layout from './components/Layout';
 import Dashboard from './pages/Dashboard';
 import TaskList from './pages/TaskList';
@@ -12,27 +16,41 @@ import './index.css';
 
 function App() {
   const [user, setUser] = useState(null);
-  const [tasks, setTasks] = useState([
-    {
-      id: 1,
-      title: 'Tổ chức họp tổng kết quý 1',
-      description: 'Chuẩn bị và tổ chức cuộc họp tổng kết quý 1/2026. Bao gồm: đặt địa điểm, chuẩn bị slides, mời khách, setup thiết bị.',
-      assigner: 'Nguyễn Văn An',
-      assignees: ['Trần Thị Bình'],
-      deadline: '2026-03-31',
-      status: 'Chờ xử lý',
-      statusClass: 'status-pending',
-      priority: 'Cao',
-      priorityClass: 'priority-high',
-      image: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=100&q=80'
-    }
-  ]);
+  const [tasks, setTasks] = useState([]);
+  const [appUsers, setAppUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const [appUsers, setAppUsers] = useState([
-    { id: 1, name: 'Nguyễn Văn An', username: 'admin', role: 'Quản trị viên', password: 'password123', isFirstLogin: false, isActive: true },
-    { id: 2, name: 'Trần Thị Bình', username: 'manager1', role: 'Quản lý', password: 'password123', isFirstLogin: false, isActive: true },
-    { id: 3, name: 'Phạm Tuấn Đức', username: 'employee1', role: 'Nhân viên', password: 'password123', isFirstLogin: false, isActive: true }
-  ]);
+  // Seed Firestore once and subscribe to real-time updates
+  useEffect(() => {
+    let seeded = false;
+
+    async function init() {
+      await seedInitialData();
+      seeded = true;
+    }
+
+    init();
+
+    // Real-time listener for tasks
+    const unsubTasks = onSnapshot(collection(db, 'tasks'), (snap) => {
+      const data = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      // Sort by createdAt descending (newest first)
+      data.sort((a, b) => (b.createdAt || '').localeCompare(a.createdAt || ''));
+      setTasks(data);
+    });
+
+    // Real-time listener for users
+    const unsubUsers = onSnapshot(collection(db, 'users'), (snap) => {
+      const data = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      setAppUsers(data);
+      setLoading(false);
+    });
+
+    return () => {
+      unsubTasks();
+      unsubUsers();
+    };
+  }, []);
 
   const handleLogin = (userData) => {
     setUser(userData);
@@ -42,42 +60,55 @@ function App() {
     setUser(null);
   };
 
-  const addTask = (newTask) => {
-    setTasks(prev => [{ ...newTask, id: Date.now() }, ...prev]);
+  // --- Task Operations ---
+  const addTask = async (newTask) => {
+    await addDoc(collection(db, 'tasks'), {
+      ...newTask,
+      createdAt: new Date().toISOString(),
+    });
   };
 
-  const updateTask = (id, updatedFields) => {
-    setTasks(prev => prev.map(task =>
-      task.id === id ? { ...task, ...updatedFields } : task
-    ));
+  const updateTask = async (id, updatedFields) => {
+    await updateDoc(doc(db, 'tasks', id), updatedFields);
   };
 
-  const handleAddUser = (newUser) => {
-    setAppUsers(prev => [...prev, { ...newUser, isActive: true }]);
+  // --- User Operations ---
+  const handleAddUser = async (newUser) => {
+    const userId = `user-${Date.now()}`;
+    await setDoc(doc(db, 'users', userId), { ...newUser, isActive: true });
   };
 
-  const handleToggleUser = (userId) => {
-    setAppUsers(prev => prev.map(u =>
-      u.id === userId ? { ...u, isActive: !u.isActive } : u
-    ));
+  const handleToggleUser = async (userId) => {
+    const target = appUsers.find(u => u.id === userId);
+    if (!target) return;
+    await updateDoc(doc(db, 'users', userId), { isActive: !target.isActive });
   };
 
-  const handleEditUser = (userId, updatedFields) => {
-    setAppUsers(prev => prev.map(u =>
-      u.id === userId ? { ...u, ...updatedFields } : u
-    ));
+  const handleEditUser = async (userId, updatedFields) => {
+    await updateDoc(doc(db, 'users', userId), updatedFields);
     if (user && user.id === userId) {
       setUser(prev => ({ ...prev, ...updatedFields }));
     }
   };
 
-  const handlePasswordChange = (newPassword) => {
-    const updatedUsers = appUsers.map(u =>
-      u.id === user.id ? { ...u, password: newPassword, isFirstLogin: false } : u
-    );
-    setAppUsers(updatedUsers);
-    setUser({ ...user, isFirstLogin: false });
+  const handlePasswordChange = async (newPassword) => {
+    await updateDoc(doc(db, 'users', user.id), {
+      password: newPassword,
+      isFirstLogin: false,
+    });
+    setUser(prev => ({ ...prev, isFirstLogin: false }));
   };
+
+  if (loading) {
+    return (
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh', fontFamily: 'Inter, sans-serif', color: '#6C757D' }}>
+        <div style={{ textAlign: 'center' }}>
+          <div style={{ fontSize: 32, marginBottom: 12 }}>🔥</div>
+          <p>Đang kết nối cơ sở dữ liệu...</p>
+        </div>
+      </div>
+    );
+  }
 
   if (!user) {
     return <Login onLogin={handleLogin} users={appUsers} />;
