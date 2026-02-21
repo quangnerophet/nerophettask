@@ -1,0 +1,136 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+  --primary-color: #5D5DFF;
+  --primary-hover: #4B4BFF;
+  --bg-main: #F8F9FD;
+  --bg-card: #FFFFFF;
+  --text-main: #1A1D23;
+  --text-secondary: #6C757D;
+  --border-color: #E9ECEF;
+  --sidebar-width: 260px;
+
+  /* Status Colors */
+  --status-pending-bg: #FFF8E6;
+  --status-pending-text: #B25E09;
+  --status-inprogress-bg: #E7F0FF;
+  --status-inprogress-text: #0052CC;
+
+  /* Priority Colors */
+  --priority-high-bg: #FFE9EC;
+  --priority-high-text: #D93545;
+  --priority-medium-bg: #FFF3E0;
+  --priority-medium-text: #E65100;
+  --priority-low-bg: #E8F5E9;
+  --priority-low-text: #2E7D32;
+
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  font-family: inherit;
+  transition: all 0.2s ease;
+}
+
+input,
+select,
+textarea {
+  font-family: inherit;
+  outline: none;
+}
+
+/* Utilities */
+.card {
+  background: var(--bg-card);
+  border-radius: var(--radius-md);
+  padding: 24px;
+  box-shadow: var(--shadow-sm);
+}
+
+.status-badge {
+  padding: 4px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.priority-badge {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+/* Interactive select badge styling */
+select.interactive-badge {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  text-align: center;
+  font-family: inherit;
+  padding-right: 12px;
+  /* remove normal right padding for arrow */
+}
+
+select.interactive-badge:hover {
+  filter: brightness(0.95);
+}
+
+.status-pending {
+  background: var(--status-pending-bg);
+  color: var(--status-pending-text);
+}
+
+.status-inprogress {
+  background: var(--status-inprogress-bg);
+  color: var(--status-inprogress-text);
+}
+
+.status-completed {
+  background: #E8F5E9;
+  color: #2E7D32;
+}
+
+.priority-high {
+  background: var(--priority-high-bg);
+  color: var(--priority-high-text);
+}
+
+.priority-medium {
+  background: var(--priority-medium-bg);
+  color: var(--priority-medium-text);
+}
+
+.priority-low {
+  background: var(--priority-low-bg);
+  color: var(--priority-low-text);
+}

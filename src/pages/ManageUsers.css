@@ -1,0 +1,245 @@
+.manage-users-page {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.add-user-card {
+    border: 1px solid var(--primary-color);
+    box-shadow: 0 4px 12px rgba(93, 93, 255, 0.1);
+}
+
+.add-user-form h3 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 24px;
+    color: var(--primary-color);
+}
+
+.add-user-form .form-group {
+    margin-bottom: 16px;
+}
+
+.add-user-form label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    font-size: 14px;
+}
+
+.add-user-form input,
+.add-user-form select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+.cancel-btn {
+    background: transparent;
+    border: 1px solid var(--border-color);
+    padding: 8px 16px;
+    border-radius: var(--radius-sm);
+    color: var(--text-main);
+}
+
+.submit-btn {
+    background: var(--primary-color);
+    color: white;
+    padding: 8px 16px;
+    border-radius: var(--radius-sm);
+    font-weight: 500;
+}
+
+.success-message {
+    text-align: center;
+    padding: 24px;
+}
+
+.success-message h3 {
+    color: #10B981;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.password-reveal {
+    background: #F1F5F9;
+    padding: 16px;
+    border-radius: var(--radius-sm);
+    margin: 24px 0;
+    font-size: 16px;
+    display: inline-block;
+}
+
+.password-reveal code {
+    font-weight: bold;
+    color: var(--primary-color);
+    margin-left: 8px;
+    font-size: 18px;
+}
+
+.notice {
+    color: var(--text-secondary);
+    font-size: 14px;
+    margin-bottom: 24px;
+}
+
+.primary-btn {
+    background: var(--primary-color);
+    padding: 10px 24px;
+    color: white;
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+}
+
+.users-list h3 {
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.users-table table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.users-table th,
+.users-table td {
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.users-table th {
+    background: #F8FAFC;
+    color: var(--text-secondary);
+    font-size: 13px;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.users-table td {
+    font-size: 14px;
+}
+
+.role-badge {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.role-admin {
+    background: #E0E7FF;
+    color: #4338CA;
+}
+
+.role-manager {
+    background: #FEF3C7;
+    color: #B45309;
+}
+
+.role-employee {
+    background: #F1F5F9;
+    color: #475569;
+}
+
+tr.user-inactive td {
+    opacity: 0.6;
+    background-color: #FAFAFA;
+}
+
+/* New Status Badges */
+.account-status-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.status-locked {
+    background: #FEE2E2;
+    color: #EF4444;
+}
+
+.status-pending-act {
+    background: #FEF3C7;
+    color: #D97706;
+}
+
+.status-active {
+    background: #DCFCE7;
+    color: #059669;
+}
+
+/* Action Dropdown */
+.action-dropdown {
+    padding: 6px 12px;
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    font-weight: 500;
+    border: 1px solid var(--border-color);
+    background-color: white;
+    cursor: pointer;
+    outline: none;
+    transition: all 0.2s;
+}
+
+.action-dropdown:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: #F1F5F9;
+}
+
+.action-dropdown.action-locked {
+    color: #EF4444;
+    border-color: #FCA5A5;
+    background: #FEF2F2;
+}
+
+.action-dropdown.action-active {
+    color: #0F172A;
+}
+
+/* Action Buttons Wrapper */
+.action-buttons-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.edit-user-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 12px;
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    font-weight: 500;
+    color: #475569;
+    background: white;
+    border: 1px solid var(--border-color);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.edit-user-btn:hover {
+    background: #F1F5F9;
+    color: #0F172A;
+    border-color: #CBD5E1;
+}
