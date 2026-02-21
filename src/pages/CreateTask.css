@@ -79,13 +79,24 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    padding: 0 20px;
+    padding: 10px 20px;
     background: white;
     border: 1px solid var(--border-color);
     border-radius: var(--radius-sm);
     font-size: 14px;
     font-weight: 600;
+    height: 44px;
 }
+
+.image-preview-mini {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 4px 12px;
+    background: #F1F5F9;
+    border-radius: 8px;
+}
+
 
 .form-actions {
     display: flex;

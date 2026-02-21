@@ -63,6 +63,17 @@ const CreateTask = ({ onAddTask, user, users }) => {
         setFormData(prev => ({ ...prev, [name]: value }));
     };
 
+    const handleImageChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setFormData(prev => ({ ...prev, image: reader.result }));
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
     return (
         <div className="create-task-page">
             <header className="page-header">
@@ -162,19 +173,25 @@ const CreateTask = ({ onAddTask, user, users }) => {
                         <div className="form-group">
                             <label>Hình ảnh minh họa (tùy chọn)</label>
                             <div className="image-upload-box">
-                                <input
-                                    type="text"
-                                    name="image"
-                                    value={formData.image}
-                                    onChange={handleChange}
-                                    placeholder="Nhập URL hình ảnh"
-                                />
-                                <button type="button" className="upload-btn">
+                                <label className="upload-btn" style={{ cursor: 'pointer' }}>
                                     <Upload size={18} />
-                                    <span>Thêm</span>
-                                </button>
+                                    <span>{formData.image ? 'Đổi ảnh' : 'Chọn ảnh'}</span>
+                                    <input
+                                        type="file"
+                                        accept="image/*"
+                                        onChange={handleImageChange}
+                                        style={{ display: 'none' }}
+                                    />
+                                </label>
+                                {formData.image && (
+                                    <div className="image-preview-mini">
+                                        <img src={formData.image} alt="Preview" style={{ width: '40px', height: '40px', objectFit: 'cover', borderRadius: '4px' }} />
+                                        <button type="button" onClick={() => setFormData(prev => ({ ...prev, image: '' }))} style={{ border: 'none', background: 'none', color: '#EF4444', fontSize: '12px', cursor: 'pointer' }}>Xóa</button>
+                                    </div>
+                                )}
                             </div>
                         </div>
+
                     </section>
 
                     <div className="form-actions">

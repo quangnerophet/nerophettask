@@ -42,27 +42,31 @@
     flex-direction: column;
     justify-content: center;
     gap: 5px;
-    width: 36px;
-    height: 36px;
-    background: transparent;
-    border: none;
+    width: 42px;
+    height: 42px;
+    background: #EEF2FF;
+    /* Light blue background */
+    border: 1px solid #E0E7FF;
     cursor: pointer;
-    padding: 4px;
-    border-radius: 8px;
+    padding: 8px;
+    border-radius: 10px;
 }
 
 .hamburger-btn span {
     display: block;
-    width: 22px;
-    height: 2px;
-    background: var(--text-primary);
+    width: 24px;
+    height: 2.5px;
+    background: #4F46E5;
+    /* Indigo/Primary color */
     border-radius: 2px;
     transition: all 0.2s ease;
 }
 
 .hamburger-btn:hover {
-    background: #F1F5F9;
+    background: #E0E7FF;
+    transform: translateY(-1px);
 }
+
 
 /* Overlay backdrop */
 .sidebar-overlay {
