@@ -1,8 +1,17 @@
 import React, { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Plus, Search, Filter, User2, Calendar, ArrowUpDown, CheckCircle, Clock } from 'lucide-react';
+import { Plus, Search, Filter, User2, Calendar, ArrowUpDown } from 'lucide-react';
 import { getStatusClass, getPriorityClass } from '../utils/helpers';
 import './TaskList.css';
+
+const today = new Date().toISOString().split('T')[0];
+
+const getDeadlineStyle = (task) => {
+    if (task.status === 'Hoàn thành') return {};
+    if (task.deadline < today) return { color: '#EF4444', fontWeight: 600 };
+    if (task.deadline === today) return { color: '#F59E0B', fontWeight: 600 };
+    return {};
+};
 
 const TaskList = ({ tasks, user, onUpdateTask }) => {
     const navigate = useNavigate();
@@ -52,10 +61,13 @@ const TaskList = ({ tasks, user, onUpdateTask }) => {
 
         // 5. Sorting
         result.sort((a, b) => {
+            // Completed tasks always go to the bottom
+            if (a.status === 'Hoàn thành' && b.status !== 'Hoàn thành') return 1;
+            if (b.status === 'Hoàn thành' && a.status !== 'Hoàn thành') return -1;
             if (sortOption === 'Mới nhất') {
-                return b.id - a.id;
+                return (b.createdAt || '').localeCompare(a.createdAt || '');
             } else if (sortOption === 'Cũ nhất') {
-                return a.id - b.id;
+                return (a.createdAt || '').localeCompare(b.createdAt || '');
             } else if (sortOption === 'Đến hạn sớm nhất') {
                 return new Date(a.deadline) - new Date(b.deadline);
             }
@@ -151,58 +163,67 @@ const TaskList = ({ tasks, user, onUpdateTask }) => {
 
             <div className="tasks-container">
                 {processedTasks.length > 0 ? (
-                    processedTasks.map((task, index) => (
-                        <div
-                            key={task.id || index}
-                            className="task-card"
-                            onClick={() => navigate(`/tasks/${task.id}`)}
-                            style={{ cursor: 'pointer' }}
-                        >
-                            <div className="task-card-main">
-                                <div className="task-header-with-badges">
-                                    <h3 className="task-title">{task.title}</h3>
-                                    <div className="task-card-badges">
-                                        <select
-                                            className={`status-badge interactive-badge ${task.statusClass}`}
-                                            value={task.status}
-                                            onClick={(e) => e.stopPropagation()}
-                                            onChange={(e) => handleStatusChange(e, task)}
-                                            title="Đổi trạng thái"
-                                        >
-                                            <option value="Chờ xử lý">Chờ xử lý</option>
-                                            <option value="Đang thực hiện">Đang thực hiện</option>
-                                            <option value="Hoàn thành">Hoàn thành</option>
-                                        </select>
-                                        <select
-                                            className={`priority-badge interactive-badge ${task.priorityClass}`}
-                                            value={task.priority}
-                                            onClick={(e) => e.stopPropagation()}
-                                            onChange={(e) => handlePriorityChange(e, task)}
-                                            title="Đổi mức độ ưu tiên"
-                                        >
-                                            <option value="Thấp">Thấp</option>
-                                            <option value="Trung bình">Trung bình</option>
-                                            <option value="Cao">Cao</option>
-                                        </select>
+                    processedTasks.map((task, index) => {
+                        const isCompleted = task.status === 'Hoàn thành';
+                        const deadlineStyle = getDeadlineStyle(task);
+                        return (
+                            <div
+                                key={task.id || index}
+                                className={`task-card ${isCompleted ? 'task-completed' : ''}`}
+                                onClick={() => navigate(`/tasks/${task.id}`)}
+                                style={{ cursor: 'pointer', opacity: isCompleted ? 0.5 : 1 }}
+                            >
+                                <div className="task-card-main">
+                                    <div className="task-header-with-badges">
+                                        <h3 className={`task-title ${isCompleted ? 'task-title-done' : ''}`}>{task.title}</h3>
+                                        <div className="task-card-badges">
+                                            <select
+                                                className={`status-badge interactive-badge ${task.statusClass}`}
+                                                value={task.status}
+                                                onClick={(e) => e.stopPropagation()}
+                                                onChange={(e) => handleStatusChange(e, task)}
+                                                title="Đổi trạng thái"
+                                            >
+                                                <option value="Chờ xử lý">Chờ xử lý</option>
+                                                <option value="Đang thực hiện">Đang thực hiện</option>
+                                                <option value="Hoàn thành">Hoàn thành</option>
+                                            </select>
+                                            <select
+                                                className={`priority-badge interactive-badge ${task.priorityClass}`}
+                                                value={task.priority}
+                                                onClick={(e) => e.stopPropagation()}
+                                                onChange={(e) => handlePriorityChange(e, task)}
+                                                title="Đổi mức độ ưu tiên"
+                                            >
+                                                <option value="Thấp">Thấp</option>
+                                                <option value="Trung bình">Trung bình</option>
+                                                <option value="Cao">Cao</option>
+                                            </select>
+                                        </div>
                                     </div>
+                                    <p className="task-desc">{task.description}</p>
+                                    <div className="task-meta-grid">
+                                        <div className="meta-item"><User2 size={14} /> Giao: {task.assigner}</div>
+                                        <div className="meta-item">
+                                            <User2 size={14} />
+                                            <span>Nhận: {task.assignees?.join(', ')}</span>
+                                        </div>
+                                        <div className="meta-item" style={deadlineStyle}>
+                                            <Calendar size={14} />
+                                            Hạn: {task.deadline}
+                                            {deadlineStyle.color === '#EF4444' && ' ⚠'}
+                                            {deadlineStyle.color === '#F59E0B' && ' ⏰'}
+                                        </div>
+                                    </div>
+                                    {task.image && (
+                                        <div className="task-attachment">
+                                            <img src={task.image} alt="Task attachment" />
+                                        </div>
+                                    )}
                                 </div>
-                                <p className="task-desc">{task.description}</p>
-                                <div className="task-meta-grid">
-                                    <div className="meta-item"><User2 size={14} /> Giao: {task.assigner}</div>
-                                    <div className="meta-item">
-                                        <User2 size={14} />
-                                        <span>Nhận: {task.assignees.join(', ')}</span>
-                                    </div>
-                                    <div className="meta-item"><Calendar size={14} /> Hạn: {task.deadline}</div>
-                                </div>
-                                {task.image && (
-                                    <div className="task-attachment">
-                                        <img src={task.image} alt="Task attachment" />
-                                    </div>
-                                )}
                             </div>
-                        </div>
-                    ))
+                        );
+                    })
                 ) : (
                     <p style={{ textAlign: 'center', color: '#64748b', padding: '40px' }}>
                         Không có task nào phù hợp với bộ lọc hiện tại.

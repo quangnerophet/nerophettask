@@ -164,3 +164,67 @@
     color: #0F172A;
     font-size: 24px;
 }
+
+/* Edit Mode Styles */
+.save-edit-btn,
+.cancel-edit-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 1px solid transparent;
+}
+
+.save-edit-btn {
+    background: #0F172A;
+    color: white;
+}
+
+.save-edit-btn:hover {
+    background: #1E293B;
+}
+
+.cancel-edit-btn {
+    background: white;
+    border-color: #E2E8F0;
+    color: #475569;
+}
+
+.cancel-edit-btn:hover {
+    background: #F8FAFC;
+}
+
+.edit-input {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1.5px solid #E2E8F0;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 500;
+    color: #0F172A;
+    background: #F8FAFC;
+    outline: none;
+    font-family: inherit;
+    transition: border-color 0.2s;
+}
+
+.edit-input:focus {
+    border-color: #94A3B8;
+    background: white;
+}
+
+.title-input {
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.desc-input {
+    resize: vertical;
+    min-height: 100px;
+    line-height: 1.6;
+}

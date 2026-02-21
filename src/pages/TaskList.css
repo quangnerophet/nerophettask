@@ -139,7 +139,7 @@
 .tab.active {
     background: white;
     color: #0f172a;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .tasks-container {
@@ -187,7 +187,8 @@
     gap: 8px;
 }
 
-.status-badge, .priority-badge {
+.status-badge,
+.priority-badge {
     padding: 6px 16px;
     border-radius: 999px;
     font-size: 12px;
@@ -198,13 +199,35 @@
     white-space: nowrap;
 }
 
-.status-pending { background-color: #FEF3C7; color: #B45309; }
-.status-in-progress { background-color: #DBEAFE; color: #1D4ED8; }
-.status-completed { background-color: #D1FAE5; color: #047857; }
+.status-pending {
+    background-color: #FEF3C7;
+    color: #B45309;
+}
 
-.priority-high { background-color: #EF4444; color: white; }
-.priority-medium { background-color: #FFEDD5; color: #C2410C; }
-.priority-low { background-color: #F3F4F6; color: #4B5563; }
+.status-in-progress {
+    background-color: #DBEAFE;
+    color: #1D4ED8;
+}
+
+.status-completed {
+    background-color: #D1FAE5;
+    color: #047857;
+}
+
+.priority-high {
+    background-color: #EF4444;
+    color: white;
+}
+
+.priority-medium {
+    background-color: #FFEDD5;
+    color: #C2410C;
+}
+
+.priority-low {
+    background-color: #F3F4F6;
+    color: #4B5563;
+}
 
 .task-desc {
     font-size: 15px;
@@ -239,4 +262,16 @@
     object-fit: cover;
     border-radius: 8px;
     border: 1px solid #E2E8F0;
+}
+
+/* Completed Task */
+.task-completed {
+    background: #F8FAFC;
+    border-color: #E2E8F0;
+    transition: opacity 0.2s ease;
+}
+
+.task-title-done {
+    text-decoration: line-through;
+    color: #94A3B8;
 }
